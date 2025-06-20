@@ -1,0 +1,11 @@
+app = "pubg-fly-server"
+
+[env]
+  PORT = "8388"
+
+[[services]]
+  internal_port = 8388
+  protocol = "udp"
+
+  [[services.ports]]
+    port = 8388
