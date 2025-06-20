@@ -26,3 +26,6 @@ jobs:
       - name: Start Cloudflare Tunnel
         run: |
           nohup cloudflared tunnel --url socks5://127.0.0.1:443 > tunnel.log 2>&1 &
+          sleep 5
+          echo "🔗 Tunnel URL (مؤقت):"
+          grep -o 'https://[a-zA-Z0-9.-]*\.trycloudflare\.com' tunnel.log || echo "⚠️ الرابط لم يظهر"
