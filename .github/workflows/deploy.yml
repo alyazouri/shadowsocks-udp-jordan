@@ -1,0 +1,28 @@
+name: Deploy Shadowsocks + Cloudflare Tunnel
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y shadowsocks-libev
+          wget -O cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared.deb
+
+      - name: Start Shadowsocks server
+        run: |
+          nohup ss-server -c ./config.json > shadowsocks.log 2>&1 &
+
+      - name: Start Cloudflare Tunnel
+        run: |
+          nohup cloudflared tunnel --url socks5://127.0.0.1:443 > tunnel.log 2>&1 &
